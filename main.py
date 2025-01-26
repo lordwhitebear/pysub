@@ -1,5 +1,6 @@
 import pygame
 import maps
+import player
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
@@ -19,7 +20,8 @@ WHITE = (255, 255, 255)
 rect_render_stack = []
 
 def update():
-    player = pygame.Rect((100, 100, 50, 50))
+    player = player.Player((100, 100, 50, 50))
+    player_rect = pygame.Rect(player_transform)
     rect_render_stack.append((player, False, WHITE))
     
     return rect_render_stack
