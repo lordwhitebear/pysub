@@ -1,4 +1,5 @@
 import pygame
+import maps
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
@@ -6,6 +7,8 @@ SCREEN_HEIGHT = 800
 TILE_GRID = 10
 TILE_WIDTH = SCREEN_WIDTH/TILE_GRID
 TILE_HEIGHT = SCREEN_HEIGHT/TILE_GRID
+
+CURRENT_MAP = maps.sub1
 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -18,15 +21,14 @@ rect_render_stack = []
 def update():
     player = pygame.Rect((100, 100, 50, 50))
     rect_render_stack.append((player, False, WHITE))
-
-    for col in range(10):
-        for row in range(10):
-            tile = pygame.Rect((col*TILE_WIDTH, row*TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT))
-            rect_render_stack.append((tile, False, BLUE))
-
+    
     return rect_render_stack
 
 def render(rect_render_stack):
+    # Render drawn map
+    for tile in maps.draw_map(CURRENT_MAP, TILE_WIDTH, TILE_HEIGHT):
+        rect_render_stack.append(tile)
+
     for rect in rect_render_stack:
         # If rect is an image
         if rect[1]:
