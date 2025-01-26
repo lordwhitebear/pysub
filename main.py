@@ -17,20 +17,36 @@ BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
+
 rect_render_stack = []
 
-def update():
-    player = player.Player((100, 100, 50, 50))
-    player_rect = pygame.Rect(player_transform)
-    rect_render_stack.append((player, False, WHITE))
-    
-    return rect_render_stack
+def start():
+    # Create main game canvas
+    global screen
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    # Create main player
+    global player1
+    player1 = player.Player((100, 100, 50, 50))
 
-def render(rect_render_stack):
-    # Render drawn map
+def handle_keystroke(key):
+    pass
+
+
+def update():
+    # Add map tiles to the render stack
     for tile in maps.draw_map(CURRENT_MAP, TILE_WIDTH, TILE_HEIGHT):
         rect_render_stack.append(tile)
 
+    # Create player1 rect
+    player1_rect = pygame.Rect(player1.get_transform())
+    rect_render_stack.append((player_rect, False, RED))
+
+    key = pygame.key.get_pressed
+
+
+def render():
+    global rect_render_stack
+    rects_drawn = 0
     for rect in rect_render_stack:
         # If rect is an image
         if rect[1]:
@@ -38,23 +54,25 @@ def render(rect_render_stack):
         else:
             # rect[2] is rect color, rect[0] is the rect object
             pygame.draw.rect(screen, rect[2], rect[0])
-
+            rects_drawn += 1
+    rect_render_stack = []
+    print(rects_drawn)
+    rects_drawn = 0
     pygame.display.update()
 
 def main():
     #INIT
     pygame.init()
-    # Create main game canvas
-    global screen
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    start()
     #MAIN LOOP
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        rect_render_stack = update()
-        render(rect_render_stack)
+        
+        update()
+        render()
 
 if __name__ == "__main__":
     main()

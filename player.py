@@ -1,19 +1,20 @@
 import pygame
 
 class Player:
+    __slots__ = ["__transform", "__image", "__color"]
     def __init__(self, transform, image=None, color=(255, 255, 255)):
-        self.transform = transform
-        self.image = image
-        self.color = color
+        self.__transform = transform
+        self.__image = image
+        self.__color = color
 
     def set_transform(self, transform):
-        self.transform = transform
+        self.__transform = transform
 
     def get_transform(self):
-        return self.transform
+        return self.__transform
     
     def get_image(self):
-        return self.image
+        return self.__image
     
     def get_color(self):
-        return self.color
+        return self.__color
