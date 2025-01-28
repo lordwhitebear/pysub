@@ -27,3 +27,7 @@ class Camera:
         else:
             raise("Camera must be in Free-Cam to set position.")
         
+    def update(self):
+        if self.__mode == CameraModes.FREE_CAM:
+            self.__position = __focus
+        
