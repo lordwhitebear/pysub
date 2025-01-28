@@ -2,7 +2,7 @@ import pygame
 
 class Player:
     __slots__ = ["__transform", "__image", "__color"]
-    def __init__(self, transform, image=None, color=(255, 255, 255)):
+    def __init__(self, transform=(100, 100, 50, 50), image=None, color=(255, 255, 255)):
         self.__transform = transform
         self.__image = image
         self.__color = color
