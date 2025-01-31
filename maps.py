@@ -13,23 +13,23 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 sub1 = [
-    [W, W, W, W, W, W, W, W, W, W],
-    [W, X, X, X, X, X, X, X, X, W],
-    [W, X, X, X, X, X, X, X, X, W],
-    [W, X, X, X, X, X, X, X, X, W],
-    [W, X, X, X, X, X, X, X, X, W],
-    [W, X, X, X, X, X, X, X, X, W],
-    [W, X, X, X, X, X, X, X, X, W],
-    [W, X, X, X, X, X, X, X, X, W],
-    [W, X, X, X, X, X, X, X, X, W],
-    [W, W, W, W, W, W, W, W, W, W]
+    [W, W, W, W, W, W, W, W, W, W, X],
+    [W, X, X, X, X, X, X, X, X, W, X],
+    [W, X, X, X, X, X, X, X, X, W, X],
+    [W, X, X, X, X, X, X, X, X, W, X],
+    [W, X, X, X, X, X, X, X, X, W, X],
+    [W, X, X, X, X, X, X, X, X, W, X],
+    [W, X, X, X, X, X, X, X, X, W, X],
+    [W, X, X, X, X, X, X, X, X, W, X],
+    [W, X, X, X, X, X, X, X, X, W, X],
+    [W, W, W, W, W, W, W, W, W, W, X]
 ]
 
-def draw_map(current_map, tile_width, tile_height):
+def draw_map(current_map, tile_width, tile_height, camera_position):
     tile_render_stack = []
-    for col in range(10):
-        for row in range(10):
-            tile = pygame.Rect((col*tile_width, row*tile_height, tile_width, tile_height))
+    for col in range(len(current_map[0])):
+        for row in range(len(current_map)):
+            tile = pygame.Rect((col*tile_width-camera_position[0], row*tile_height-camera_position[1], tile_width, tile_height))
 
             tile_color = WHITE
             if current_map[row][col] == EMPTY:
