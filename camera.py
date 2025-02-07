@@ -1,5 +1,8 @@
 import pygame
 from enum import Enum
+import math
+
+VISION_DISTANCE = 1
 
 class CameraModes(Enum):
     FREE_CAM = 1
@@ -33,7 +36,14 @@ class Camera:
         
     def set_focus(self, focus):
         self.__focus = focus
-        
+
+    def in_range(self, position):
+        offset_magnitude = math.sqrt(self.__offset[0]**2 + self.__offset[1]**2)
+        if(math.dist(position,(self.__position[0] - self.__offset[0], self.__position[1] - self.__offset[1])) > offset_magnitude * VISION_DISTANCE):
+            return False
+        return True
+    
+    # Update the cameras position based on the CameraMode
     def update(self):
         if self.__mode == CameraModes.FREE_CAM:
             try:

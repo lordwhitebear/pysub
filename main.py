@@ -2,33 +2,8 @@ import pygame
 import maps
 import player
 import camera
-
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 800
-
-FPS = 60.0
-
-TILE_GRID = 10
-TILE_WIDTH = SCREEN_WIDTH/TILE_GRID
-TILE_HEIGHT = SCREEN_HEIGHT/TILE_GRID
-
-KEY_UP = pygame.K_UP
-KEY_DOWN = pygame.K_DOWN
-KEY_LEFT = pygame.K_LEFT
-KEY_RIGHT = pygame.K_RIGHT
-
-CURRENT_MAP = maps.sub1
-
-MAIN_CAMERA = None
-
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-
-PLAYER_SIZE = 50
-PLAYER_SPEED = 200
+from namespace import *
+from gamestate import *
 
 rect_render_stack = []
 surface_render_stack = []
@@ -40,6 +15,9 @@ def start():
     # Create clock to train game tick
     global clock
     clock=pygame.time.Clock()
+    # Frames since start
+    global progressed_frames
+    progressed_frames = 0
     # Create main player
     global player1
     player1 = player.Player((380, 380), PLAYER_SIZE)
@@ -47,36 +25,40 @@ def start():
     global MAIN_CAMERA
     camera1 = camera.Camera((400, 400), ((-SCREEN_WIDTH/2)+PLAYER_SIZE/2, (-SCREEN_HEIGHT/2)+PLAYER_SIZE/2), player1)
     MAIN_CAMERA = camera1
+    # Set current map
+    global CURRENT_MAP
+    CURRENT_MAP = maps.sub1
     
 
 def handle_keystroke(keys):
     # Up key pressed
-    if keys[KEY_UP] and not keys[KEY_DOWN]:
+    if (keys[KEY_UP] or keys[KEY_UP_ALT]) and not (keys[KEY_DOWN] or keys[KEY_DOWN_ALT]):
         player_position = player1.get_position()
         new_player_position = (player1.get_position()[0], player1.get_position()[1]-(PLAYER_SPEED*dt))
         player1.set_position(new_player_position)
     # Down key pressed
-    if keys[KEY_DOWN] and not keys[KEY_UP]:
+    if (keys[KEY_DOWN] or keys[KEY_DOWN_ALT]) and not (keys[KEY_UP] or keys[KEY_UP_ALT]):
         player_position = player1.get_position()
         new_player_position = (player1.get_position()[0], player1.get_position()[1]+(PLAYER_SPEED*dt))
         player1.set_position(new_player_position)
     # Right key pressed
-    if keys[KEY_RIGHT] and not keys[KEY_LEFT]:
+    if (keys[KEY_RIGHT] or keys[KEY_RIGHT_ALT]) and not (keys[KEY_LEFT] or keys[KEY_LEFT_ALT]):
         player_position = player1.get_position()
         new_player_position = (player1.get_position()[0]+(PLAYER_SPEED*dt), player1.get_position()[1])
         player1.set_position(new_player_position)
     # Left key pressed
-    if keys[KEY_LEFT] and not keys[KEY_RIGHT]:
+    if (keys[KEY_LEFT] or keys[KEY_LEFT_ALT]) and not (keys[KEY_RIGHT] or keys[KEY_RIGHT_ALT]):
         player_position = player1.get_position()
         new_player_position = (player1.get_position()[0]-(PLAYER_SPEED*dt), player1.get_position()[1])
         player1.set_position(new_player_position)
 
 def update():
     # Calculate DeltaTime
-    global dt
+    global dt, progressed_frames
     dt = clock.tick() / 1000
     try:
-        print(1/dt)
+        if(progressed_frames % 100 == 0):
+            print("fps:", 1/dt)
     except:
         ...
 
@@ -84,7 +66,7 @@ def update():
     MAIN_CAMERA.update()
 
     # Add map surface to the surface render stack
-    tile_surface, tile_surface_position = maps.draw_map(CURRENT_MAP, TILE_WIDTH, TILE_HEIGHT, MAIN_CAMERA.get_position())
+    tile_surface, tile_surface_position = maps.draw_map()
     # Modify tile_surface_position by camera position
     tile_surface_position = (tile_surface_position[0]-MAIN_CAMERA.get_position()[0], tile_surface_position[1]-MAIN_CAMERA.get_position()[1])
     surface_render_stack.append((tile_surface, tile_surface_position))
@@ -93,12 +75,17 @@ def update():
     player1_rect = pygame.Rect((player1.get_position()[0]-MAIN_CAMERA.get_position()[0], player1.get_position()[1]-MAIN_CAMERA.get_position()[1], PLAYER_SIZE, PLAYER_SIZE))
     rect_render_stack.append((player1_rect, RED))
 
+
     # Handle keystrokes
     key = pygame.key.get_pressed()
     handle_keystroke(key)
 
+    # Increase progressed frames tracker
+    progressed_frames += 1
+
 def render():
     global rect_render_stack, surface_render_stack
+    # Track number of drawn objects
     surfaces_drawn = 0
     rects_drawn = 0
 
@@ -119,7 +106,6 @@ def render():
         rects_drawn += 1
     rect_render_stack = []
 
-    print(rects_drawn, surfaces_drawn)
     rects_drawn, surfaces_drawn = 0, 0
 
     pygame.display.update()
