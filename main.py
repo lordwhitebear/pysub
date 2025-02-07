@@ -31,6 +31,7 @@ PLAYER_SIZE = 50
 PLAYER_SPEED = 200
 
 rect_render_stack = []
+surface_render_stack = []
 
 def start():
     # Create main game canvas
@@ -82,32 +83,45 @@ def update():
     # Update camera position
     MAIN_CAMERA.update()
 
-    # Add map tiles to the render stack
-    for tile in maps.draw_map(CURRENT_MAP, TILE_WIDTH, TILE_HEIGHT, MAIN_CAMERA.get_position()):
-        rect_render_stack.append(tile)
+    # Add map surface to the surface render stack
+    tile_surface, tile_surface_position = maps.draw_map(CURRENT_MAP, TILE_WIDTH, TILE_HEIGHT, MAIN_CAMERA.get_position())
+    # Modify tile_surface_position by camera position
+    tile_surface_position = (tile_surface_position[0]-MAIN_CAMERA.get_position()[0], tile_surface_position[1]-MAIN_CAMERA.get_position()[1])
+    surface_render_stack.append((tile_surface, tile_surface_position))
 
     # Create player1 rect
     player1_rect = pygame.Rect((player1.get_position()[0]-MAIN_CAMERA.get_position()[0], player1.get_position()[1]-MAIN_CAMERA.get_position()[1], PLAYER_SIZE, PLAYER_SIZE))
-    rect_render_stack.append((player1_rect, False, RED))
+    rect_render_stack.append((player1_rect, RED))
 
     # Handle keystrokes
     key = pygame.key.get_pressed()
     handle_keystroke(key)
 
 def render():
-    global rect_render_stack
+    global rect_render_stack, surface_render_stack
+    surfaces_drawn = 0
     rects_drawn = 0
+
+    # Clear screen
+    screen.fill((0, 0, 0))
+
+    # Draw surfaces
+    for surface in surface_render_stack:
+        # surface[0] is the surface object, surface[1] is a tuple representing the surfaces position
+        screen.blit(surface[0], surface[1])
+        surfaces_drawn += 1
+    surface_render_stack = []
+
+    # Draw rectangles
     for rect in rect_render_stack:
-        # If rect is an image
-        if rect[1]:
-            pass
-        else:
-            # rect[2] is rect color, rect[0] is the rect object
-            pygame.draw.rect(screen, rect[2], rect[0])
-            rects_drawn += 1
+        # rect[1] is color, rect[0] is the rect object
+        pygame.draw.rect(screen, rect[1], rect[0])
+        rects_drawn += 1
     rect_render_stack = []
-    print(rects_drawn)
-    rects_drawn = 0
+
+    print(rects_drawn, surfaces_drawn)
+    rects_drawn, surfaces_drawn = 0, 0
+
     pygame.display.update()
 
 def main():
