@@ -7,16 +7,16 @@ import math
 # X - Empty/Floor
 
 sub1 = [
-    [H, H, H, H, H, H, H, H, H, H, X],
-    [H, X, X, X, X, X, X, X, X, H, X],
-    [H, X, X, X, X, X, X, X, X, H, X],
-    [H, X, X, X, X, X, X, X, X, H, H],
-    [H, X, X, X, X, X, X, X, X, D, X],
-    [H, X, X, X, X, X, X, X, X, D, X],
-    [H, X, X, X, X, X, X, X, X, H, H],
-    [H, X, X, X, X, X, X, X, X, H, X],
-    [H, X, X, X, X, X, X, X, X, H, X],
-    [H, H, H, H, H, H, H, H, H, H, X]
+    [H, H, H, H, H, H, H, H, H, H, X, H, H, H, H, H, H, H, H, H],
+    [H, F, F, F, F, F, F, F, F, H, X, H, F, F, F, F, F, F, F, H],
+    [H, F, F, F, F, F, F, F, F, H, X, H, F, F, F, F, F, F, F, H],
+    [H, F, F, F, F, F, F, F, F, H, H, H, F, F, F, F, F, F, F, H],
+    [H, F, F, F, F, F, F, F, F, F, D, F, F, F, F, F, F, F, F, H],
+    [H, F, F, F, F, F, F, F, F, F, D, F, F, F, F, F, F, F, F, H],
+    [H, F, F, F, F, F, F, F, F, H, H, H, F, F, F, F, F, F, F, H],
+    [H, F, F, F, F, F, F, F, F, H, X, H, F, F, F, F, F, F, F, H],
+    [H, F, F, F, F, F, F, F, F, H, X, H, F, F, F, F, F, F, F, H],
+    [H, H, H, H, H, H, H, H, H, H, X, H, H, H, H, H, H, H, H, H]
 ]
 
 def draw_map():
@@ -24,16 +24,11 @@ def draw_map():
     for col in range(len(game.CURRENT_MAP[0])):
         for row in range(len(game.CURRENT_MAP)):
             #tile = pygame.Rect((col*TILE_WIDTH-camera_position[0], row*TILE_HEIGHT-camera_position[1], TILE_WIDTH, TILE_HEIGHT))
+            if(game.CURRENT_MAP[row][col] == WATER):
+                continue
             if game.MAIN_CAMERA.in_range((game.TILE_WIDTH*col, game.TILE_HEIGHT*row)):
-                if game.CURRENT_MAP[row][col] == EMPTY:
-                    tile_img = pygame.image.load(FLOOR_TILE)
-                elif game.CURRENT_MAP[row][col] == HULL:
-                    tile_img = pygame.image.load(HULL_TILE)
-                elif game.CURRENT_MAP[row][col] == DOOR:
-                    tile_img = pygame.image.load(DOOR_TILE)
-                else:
-                    tile_img = pygame.image.load(PLACEHOLDER)
-                
+                tile_img = pygame.image.load(TILE_TO_IMAGE_REF[game.CURRENT_MAP[row][col]])
+
                 tile_img = pygame.transform.scale(tile_img, (game.TILE_WIDTH, game.TILE_HEIGHT))
                 tile_surface.blit(tile_img, (game.TILE_WIDTH*col, game.TILE_HEIGHT*row))
             else:
