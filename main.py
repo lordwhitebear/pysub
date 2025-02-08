@@ -7,8 +7,6 @@ import gamestate as game
 import controllers
 from helpers import *
 
-rect_render_stack = []
-surface_render_stack = []
 
 def start():
     # Create main game canvas
@@ -38,6 +36,10 @@ def start():
     doorcontroller2 = controllers.DoorController(tile_to_coordinate((4, 11)), tile_to_coordinate((2, 1)), [(4, 10), (5, 10)])
     controller_stack.append(doorcontroller1)
     controller_stack.append(doorcontroller2)
+    # Create render stacks, used for delivering all the drawn objects to be rendered
+    global rect_render_stack, surface_render_stack
+    rect_render_stack = []
+    surface_render_stack = []
     
 
 def handle_keyheld(keys):
