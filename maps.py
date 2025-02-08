@@ -36,15 +36,15 @@ def draw_map():
 
     return (tile_surface, (0,0))
 
-def position_to_tile(position):
+def area_to_tile(position, size):
     left_x = math.floor(position[0]/game.TILE_WIDTH)
-    right_x = math.floor((position[0]+game.PLAYER_SIZE)/game.TILE_WIDTH)
+    right_x = math.floor((position[0]+size[0])/game.TILE_WIDTH)
 
     top_y = math.floor(position[1]/game.TILE_HEIGHT)
-    bottom_y = math.floor((position[1]+game.PLAYER_SIZE)/game.TILE_HEIGHT)
+    bottom_y = math.floor((position[1]+size[1])/game.TILE_HEIGHT)
 
-    middle_x = math.floor((position[0]+(game.PLAYER_SIZE/2))/game.TILE_HEIGHT)
-    middle_y = math.floor((position[1]+(game.PLAYER_SIZE/2))/game.TILE_HEIGHT)
+    middle_x = math.floor((position[0]+(size[0]/2))/game.TILE_HEIGHT)
+    middle_y = math.floor((position[1]+(size[1]/2))/game.TILE_HEIGHT)
 
     tiles_touched = set()
     try:
@@ -75,9 +75,9 @@ def position_to_tile(position):
 
     return middle_tile, tiles_touched
 
-def touching_tile(position, tile):
+def area_touching_tile(position, size, tile):
     # If the position given is outside of the map, simply return False
-    discard, tiles_touched = position_to_tile(position)
+    discard, tiles_touched = area_to_tile(position, size)
     if isinstance(tile, list):
         for t in tile:
             if t in tiles_touched:

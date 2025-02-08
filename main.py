@@ -46,22 +46,22 @@ def handle_keyheld(keys):
     # Up key pressed
     if (keys[KEY_UP] or keys[KEY_UP_ALT]) and not (keys[KEY_DOWN] or keys[KEY_DOWN_ALT]):
         new_position = (player1.get_position()[0], player1.get_position()[1]-(game.PLAYER_SPEED*dt))
-        if not maps.touching_tile(new_position, SOLID_TILES):
+        if not maps.area_touching_tile(new_position, (game.PLAYER_SIZE, game.PLAYER_SIZE), SOLID_TILES):
             player1.set_position(new_position)
     # Down key pressed
     if (keys[KEY_DOWN] or keys[KEY_DOWN_ALT]) and not (keys[KEY_UP] or keys[KEY_UP_ALT]):
         new_position = (player1.get_position()[0], player1.get_position()[1]+(game.PLAYER_SPEED*dt))
-        if not maps.touching_tile(new_position, SOLID_TILES):
+        if not maps.area_touching_tile(new_position, (game.PLAYER_SIZE, game.PLAYER_SIZE), SOLID_TILES):
             player1.set_position(new_position)
     # Right key pressed
     if (keys[KEY_RIGHT] or keys[KEY_RIGHT_ALT]) and not (keys[KEY_LEFT] or keys[KEY_LEFT_ALT]):
         new_position = (player1.get_position()[0]+(game.PLAYER_SPEED*dt), player1.get_position()[1])
-        if not maps.touching_tile(new_position, SOLID_TILES):
+        if not maps.area_touching_tile(new_position, (game.PLAYER_SIZE, game.PLAYER_SIZE), SOLID_TILES):
             player1.set_position(new_position)
     # Left key pressed
     if (keys[KEY_LEFT] or keys[KEY_LEFT_ALT]) and not (keys[KEY_RIGHT] or keys[KEY_RIGHT_ALT]):
         new_position = (player1.get_position()[0]-(game.PLAYER_SPEED*dt), player1.get_position()[1])
-        if not maps.touching_tile(new_position, SOLID_TILES):
+        if not maps.area_touching_tile(new_position, (game.PLAYER_SIZE, game.PLAYER_SIZE), SOLID_TILES):
             player1.set_position(new_position)
         
 
