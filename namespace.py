@@ -2,6 +2,7 @@ import pygame
 
 # Image assets
 PLACEHOLDER = "assets/placeholder.png"
+DOOR_TILE = "assets/door_tile.png"
 HULL_TILE = "assets/hull_tile.png"
 FLOOR_TILE = "assets/floor_tile.png"
 
@@ -16,10 +17,17 @@ KEY_LEFT = pygame.K_LEFT
 KEY_LEFT_ALT = 97 # "a"
 
 # Map namespace
+DOOR = 2
 HULL = 1
 EMPTY = 0
+D = DOOR
 H = HULL
 X = EMPTY
+SOLID_TILES = [HULL] # Contains all tiles that cannot be walked through
+
+# Camera modes
+FREE_CAM = 1
+FOLLOW = 2
 
 # Colors
 RED = (255, 0, 0)
